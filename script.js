@@ -1,3 +1,53 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const menuContainer = document.getElementById("menu");
+
+    // 🔥 Menu items array
+    const menuItems = [
+        { name: "Pizza", description: "Pepperoni, mushroom, mozzarella", price: 14, imgSrc: "./assets/images/pizza.png" },
+        { name: "Hamburger", description: "Beef, cheese, lettuce", price: 12, imgSrc: "./assets/images/burger.png" },
+        { name: "Beer", description: "Grain, hops, yeast, water", price: 12, imgSrc: "./assets/images/beer.png" }
+    ];
+
+    // 🔥 Render menu items dynamically
+    function renderMenu() {
+        menuContainer.innerHTML = ""; // Clear existing menu
+
+        menuItems.forEach(item => {
+            const menuItem = document.createElement("div");
+            menuItem.classList.add("menu-item");
+
+            menuItem.innerHTML = `
+                <img src="${item.imgSrc}" alt="${item.name}">
+                <div class="details">
+                    <h2>${item.name}</h2>
+                    <p>${item.description}</p>
+                    <span class="price">$${item.price}</span>
+                </div>
+                <button class="add-to-cart" data-name="${item.name}" data-price="${item.price}">+</button>
+            `;
+
+            menuContainer.appendChild(menuItem);
+        });
+
+        // 🔥 Attach event listeners after rendering
+        attachAddToCartListeners();
+    }
+
+    // 🔥 Attach event listeners to dynamically created buttons
+    function attachAddToCartListeners() {
+        document.querySelectorAll(".add-to-cart").forEach(button => {
+            button.addEventListener("click", () => {
+                const name = button.dataset.name;
+                const price = parseFloat(button.dataset.price);
+                addToCart(name, price);
+            });
+        });
+    }
+
+    // Call the render function on page load
+    renderMenu();
+});
+
 let cart = [];
 const orderSection = document.getElementById("order-section");
 const orderItemsEl = document.getElementById("order-items");
@@ -9,26 +59,18 @@ const paymentForm = document.getElementById("payment-form");
 const orderConfirmation = document.getElementById("order-confirmation");
 const customerNameEl = document.getElementById("customer-name");
 
-document.addEventListener("DOMContentLoaded", () => {
-    paymentModal.style.display = "none"; // Ensure modal is hidden on load
-});
+// Function to add items to the cart
+function addToCart(name, price) {
+    const existingItem = cart.find(item => item.name === name);
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({ name, price, quantity: 1 });
+    }
+    updateOrder();
+}
 
-document.querySelectorAll(".add-to-cart").forEach(button => {
-    button.addEventListener("click", () => {
-        const name = button.dataset.name;
-        const price = parseFloat(button.dataset.price);
-
-        const existingItem = cart.find(item => item.name === name);
-        if (existingItem) {
-            existingItem.quantity += 1;
-        } else {
-            cart.push({ name, price, quantity: 1 });
-        }
-
-        updateOrder();
-    });
-});
-
+// Function to update the order UI
 function updateOrder() {
     orderItemsEl.innerHTML = "";
     let total = 0;
@@ -39,7 +81,7 @@ function updateOrder() {
         const li = document.createElement("li");
         li.classList.add("order-item");
         li.innerHTML = `
-            ${item.name} x${item.quantity} <span>$${item.price * item.quantity}</span>
+            ${item.name} x${item.quantity} <span>$${(item.price * item.quantity).toFixed(2)}</span>
             <button class="remove-item" data-index="${index}">remove</button>
         `;
         orderItemsEl.appendChild(li);
@@ -59,6 +101,10 @@ function updateOrder() {
 
 // Show payment modal when "Complete Order" is clicked
 completeOrderBtn.addEventListener("click", () => {
+    if (cart.length === 0) {
+        alert("Your cart is empty! Add items before proceeding.");
+        return;
+    }
     paymentModal.style.display = "flex";
 });
 
@@ -67,11 +113,10 @@ closeModalBtn.addEventListener("click", () => {
     paymentModal.style.display = "none";
 });
 
-// Handle form submission and show confirmation message
+// Handle payment form submission
 paymentForm.addEventListener("submit", (event) => {
-    event.preventDefault(); // Prevent page reload
+    event.preventDefault();
 
-    // Get form values
     const name = document.getElementById("card-name").value.trim();
     const cardNumber = document.getElementById("card-number").value.trim();
     const cvv = document.getElementById("card-cvv").value.trim();
@@ -81,16 +126,14 @@ paymentForm.addEventListener("submit", (event) => {
         return;
     }
 
-    // Update the confirmation message with the customer's name
+    // Update confirmation message
     customerNameEl.textContent = name;
 
-    // Hide order section & modal, show confirmation message
+    // Reset everything
     paymentModal.style.display = "none";
-    orderConfirmation.style.display = "block"; // Show success message
-
-    // Clear cart, update UI, and hide order section immediately
+    orderConfirmation.style.display = "block";
     cart = [];
     updateOrder();
-    orderSection.classList.add("hidden"); // ✅ Hides order section immediately
+    orderSection.classList.add("hidden");
     paymentForm.reset();
 });
