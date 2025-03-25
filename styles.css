@@ -1,0 +1,240 @@
+@import url('https://fonts.googleapis.com/css2?family=Smythe&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Smythe', sans-serif;
+    text-align: center;
+    background-color: #f8f8f8;
+}
+
+/* HEADER */
+header {
+    background: url('./assets/images/banner.png') center/cover no-repeat;
+    color: white;
+    padding: 40px 20px;
+    text-align: left;
+}
+
+/* MENU SECTION */
+#menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.menu-item img {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+    object-fit: cover;
+}
+
+.details {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.price {
+    font-weight: bold;
+}
+
+.add-to-cart {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* ORDER SECTION */
+#order-section {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+    margin: 20px auto;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Hide order section initially */
+.hidden {
+    display: none;
+}
+
+#order-items {
+    list-style: none;
+    padding: 0;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.remove-item {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#complete-order {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+}
+
+/* MODAL */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none; /* ✅ Ensures modal is hidden by default */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 90%; /* Adjusted for smaller screens */
+    max-width: 350px; /* Prevents it from being too wide */
+}
+
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#pay-button, #close-modal {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#pay-button {
+    background: #28a745;
+    color: white;
+}
+
+#close-modal {
+    background: red;
+    color: white;
+}
+
+#order-confirmation {
+    background-color: #e8fbe8; /* Light green background */
+    color: #1f4d1f; /* Dark green text */
+    font-size: 18px;
+    padding: 15px;
+    text-align: center;
+    border-radius: 5px;
+    margin-top: 20px;
+    display: none;
+}
+
+/* 🔥 RESPONSIVE DESIGN 🔥 */
+
+/* Small screens (max-width: 768px) */
+@media (max-width: 768px) {
+    header {
+        padding: 30px 15px;
+        text-align: center;
+    }
+
+    .menu-item {
+        width: 90%;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .menu-item img {
+        margin: 0 auto 10px;
+    }
+
+    .details {
+        text-align: center;
+    }
+
+    .add-to-cart {
+        font-size: 18px;
+        padding: 8px;
+    }
+
+    #order-section {
+        width: 90%;
+    }
+}
+
+/* Extra small screens (max-width: 480px) */
+@media (max-width: 480px) {
+    header {
+        padding: 25px 10px;
+    }
+
+    .menu-item {
+        width: 95%;
+        padding: 10px;
+    }
+
+    .menu-item img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .add-to-cart {
+        font-size: 16px;
+        padding: 6px;
+    }
+
+    #order-section {
+        width: 95%;
+    }
+
+    .modal-content {
+        width: 95%;
+    }
+}
